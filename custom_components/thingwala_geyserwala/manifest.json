@@ -1,0 +1,20 @@
+{
+  "domain": "thingwala_geyserwala",
+  "name": "Geyserwala",
+  "version": "0.0.1",
+  "config_flow": true,
+  "documentation": "https://github.com/thingwala/geyserwala-ha/README.md",
+  "issue_tracker": "https://github.com/thingwala/geyserwala-ha/issues",
+  "requirements": ["thingwala-geyserwala"],
+  "ssdp": [],
+  "homekit": {},
+  "dependencies": ["zeroconf"],
+  "codeowners": [
+    "@thingwala"
+  ],
+  "iot_class": "local_polling",
+  "integration_type": "device",
+  "zeroconf": [
+    "_geyserwala._tcp.local."
+  ]
+}
