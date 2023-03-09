@@ -32,8 +32,8 @@ class Switch:
 
 SWITCHES = [
     Switch("Boost", "boost_demand", None, "mdi:fire", "mdi:fire-off", True),
-    Switch("Remote Demand", "remote_demand", None, "mdi:fire", "mdi:fire-off", False),
-    Switch("Remote Disable", "remote_disable", None, "mdi:fire", "mdi:fire-off", False),
+    Switch("External Demand", "external_demand", None, "mdi:fire", "mdi:fire-off", False),
+    Switch("Low Power Enable", "lowpower_enable", None, "mdi:fire", "mdi:fire-off", False),
 ]
 
 SWITCH_MAP = {s.id: s for s in SWITCHES}

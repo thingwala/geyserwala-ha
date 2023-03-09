@@ -38,7 +38,7 @@ class Number:
 
 SENSORS = [
     Number("Setpoint", "setpoint", None, "mdi:thermostat", True),
-    Number("Remote Setpoint", "remote_setpoint", None, "mdi:thermostat", False),
+    Number("External Setpoint", "external_setpoint", None, "mdi:thermostat", False),
 ]
 
 SENSOR_MAP = {s.id: s for s in SENSORS}
