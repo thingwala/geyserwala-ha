@@ -19,36 +19,22 @@ from thingwala.geyserwala.const import (
     GEYSERWALA_MODE_TIMER,
     GEYSERWALA_MODE_SOLAR,
     GEYSERWALA_MODE_HOLIDAY,
+    GEYSERWALA_MODE_STANDBY,
 )
 
 from .const import DOMAIN
 from .entity import GeyserwalaEntity
 
 
-@dataclass
-class Select:
-    """Entity params."""
-
-    name: str
-    id: str
-    entity_category: str
-    icon_map: Dict[str, str]
-    options: List[str]
-    visible: bool
-
-
-SELECTS = [
-    Select("Mode", "mode", None,
-           {
-               GEYSERWALA_MODE_SETPOINT: "mdi:thermostat-auto",
-               GEYSERWALA_MODE_TIMER: "mdi:timer",
-               GEYSERWALA_MODE_SOLAR: "mdi:solar-power-variant",
-               GEYSERWALA_MODE_HOLIDAY: "mdi:airplane",
-           },
-           GEYSERWALA_MODES, True),
-]
-
-SELECT_MAP = {s.id: s for s in SELECTS}
+ICON_MAP = {
+    "mode": {
+        GEYSERWALA_MODE_SETPOINT: "mdi:thermostat-auto",
+        GEYSERWALA_MODE_TIMER: "mdi:timer",
+        GEYSERWALA_MODE_HOLIDAY: "mdi:airplane",
+        GEYSERWALA_MODE_STANDBY: "mdi:power-standby",
+        GEYSERWALA_MODE_SOLAR: "mdi:solar-power-variant",
+    },
+}
 
 
 async def async_setup_entry(
@@ -58,23 +44,24 @@ async def async_setup_entry(
 ) -> None:
     """Set up Geyserwala select entities."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
+
+    options = GEYSERWALA_MODES
     async_add_entities(
-        GeyserwalaSelect(
+        [GeyserwalaSelect(
             coordinator,
             SelectEntityDescription(
-                key=item.id,
+                key="mode",
                 has_entity_name=True,
-                name=item.name,
-                entity_category=item.entity_category,
+                name="Mode",
+                entity_category=None,
                 device_class=None,
-                options=item.options,
+                options=coordinator.data.modes,
                 unit_of_measurement=None,
-                entity_registry_visible_default=item.visible,
+                entity_registry_visible_default=True,
                 entity_registry_enabled_default=True,
             ),
-            item.id,
-        )
-        for item in SELECTS
+            "mode",
+        )]
     )
 
 
@@ -93,4 +80,4 @@ class GeyserwalaSelect(GeyserwalaEntity, SelectEntity):
     @property
     def icon(self) -> str:
         """Icon."""
-        return SELECT_MAP[self._gw_id].icon_map[self.current_option]
+        return ICON_MAP[self._gw_id][self.current_option]
