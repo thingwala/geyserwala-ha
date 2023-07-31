@@ -1,5 +1,5 @@
 ####################################################################################
-# Copyright (c) 2023 ThingWala                                                     #
+# Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala number platform."""
 from dataclasses import dataclass

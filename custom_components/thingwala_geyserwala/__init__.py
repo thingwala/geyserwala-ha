@@ -1,7 +1,7 @@
 ####################################################################################
-# Copyright (c) 2023 ThingWala                                                     #
+# Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
-"""Geyserwala integration by ThingWala."""
+"""Geyserwala integration by Thingwala."""
 
 from datetime import timedelta
 from typing import List

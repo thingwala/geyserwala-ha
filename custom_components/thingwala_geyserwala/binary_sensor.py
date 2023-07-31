@@ -1,5 +1,5 @@
 ####################################################################################
-# Copyright (c) 2023 ThingWala                                                     #
+# Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala binary sensor platform."""
 from dataclasses import dataclass

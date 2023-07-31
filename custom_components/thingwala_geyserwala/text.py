@@ -1,5 +1,5 @@
 ####################################################################################
-# Copyright (c) 2023 ThingWala                                                     #
+# Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala text platform."""
 import asyncio
@@ -10,9 +10,6 @@ from homeassistant.components.text import (
     TextEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    UnitOfTemperature,
-)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 

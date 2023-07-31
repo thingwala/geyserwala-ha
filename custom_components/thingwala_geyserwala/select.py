@@ -1,10 +1,7 @@
 ####################################################################################
-# Copyright (c) 2023 ThingWala                                                     #
+# Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala select platform."""
-from dataclasses import dataclass
-from typing import Dict, List
-
 from homeassistant.components.select import (
     SelectEntity,
     SelectEntityDescription,
@@ -14,7 +11,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from thingwala.geyserwala.const import (
-    GEYSERWALA_MODES,
     GEYSERWALA_MODE_SETPOINT,
     GEYSERWALA_MODE_TIMER,
     GEYSERWALA_MODE_SOLAR,
@@ -45,7 +41,6 @@ async def async_setup_entry(
     """Set up Geyserwala select entities."""
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
 
-    options = GEYSERWALA_MODES
     async_add_entities(
         [GeyserwalaSelect(
             coordinator,

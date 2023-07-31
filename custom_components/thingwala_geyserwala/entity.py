@@ -1,5 +1,5 @@
 ####################################################################################
-# Copyright (c) 2023 ThingWala                                                     #
+# Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala entity."""
 from homeassistant.helpers.entity import (
@@ -32,7 +32,7 @@ class GeyserwalaEntity(CoordinatorEntity[DataUpdateCoordinator[GeyserwalaClientA
         self._attr_unique_id = f"{DOMAIN}.{self.coordinator.data.id}.{gw_id}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self.coordinator.data.id)},
-            manufacturer="ThingWala",
+            manufacturer="Thingwala",
             model="Geyserwala",
             name=self.coordinator.data.name,
             sw_version=self.coordinator.data.version,
