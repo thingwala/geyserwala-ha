@@ -19,6 +19,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from thingwala.geyserwala.const import (
     GEYSERWALA_SETPOINT_TEMP_MIN,
     GEYSERWALA_SETPOINT_TEMP_MAX,
+    GEYSERWALA_AUTOMATION_TEMP_MIN,
+    GEYSERWALA_AUTOMATION_TEMP_MAX,
 )
 
 from .const import DOMAIN
@@ -34,11 +36,13 @@ class Number:
     entity_category: str
     icon: str
     visible: bool
+    min: int
+    max: int
 
 
 SENSORS = [
-    Number("Setpoint", "setpoint", None, "mdi:thermostat", True),
-    Number("External Setpoint", "external_setpoint", None, "mdi:thermostat", False),
+    Number("Setpoint", "setpoint", None, "mdi:thermostat", True, GEYSERWALA_SETPOINT_TEMP_MIN, GEYSERWALA_SETPOINT_TEMP_MAX),
+    Number("External Setpoint", "external_setpoint", None, "mdi:thermostat", False, GEYSERWALA_AUTOMATION_TEMP_MIN, GEYSERWALA_AUTOMATION_TEMP_MAX),
 ]
 
 SENSOR_MAP = {s.id: s for s in SENSORS}
@@ -60,8 +64,8 @@ async def async_setup_entry(
                 name=item.name,
                 entity_category=item.entity_category,
                 device_class=NumberDeviceClass.TEMPERATURE,
-                native_min_value=GEYSERWALA_SETPOINT_TEMP_MIN,
-                native_max_value=GEYSERWALA_SETPOINT_TEMP_MAX,
+                native_min_value=item.min,
+                native_max_value=item.max,
                 native_step=1,
                 unit_of_measurement=UnitOfTemperature.CELSIUS,
                 icon=item.icon,

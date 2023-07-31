@@ -21,6 +21,7 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from thingwala.geyserwala.aio.client import GeyserwalaClientAsync
+import thingwala.geyserwala.errors
 
 from .const import DOMAIN, _LOGGER
 
@@ -41,6 +42,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         async with async_timeout.timeout(20):
             try:
                 await gwc.update_status()
+            except thingwala.geyserwala.errors.RequestError as ex:
+                raise UpdateFailed(ex) from ex
             except Exception as ex:
                 _LOGGER.exception("GeyserwalaClientAsync.update_status")
                 raise UpdateFailed(ex) from ex
