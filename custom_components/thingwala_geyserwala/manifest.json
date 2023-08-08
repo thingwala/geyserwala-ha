@@ -9,8 +9,8 @@
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/thingwala/geyserwala-ha/issues",
-  "requirements": ["thingwala-geyserwala==0.0.5"],
+  "requirements": ["thingwala-geyserwala==0.0.6"],
   "ssdp": [],
-  "version": "0.0.5",
+  "version": "0.0.6",
   "zeroconf": ["_geyserwala._tcp.local."]
 }
