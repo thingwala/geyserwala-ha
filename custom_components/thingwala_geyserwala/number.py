@@ -19,8 +19,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from thingwala.geyserwala.const import (
     GEYSERWALA_SETPOINT_TEMP_MIN,
     GEYSERWALA_SETPOINT_TEMP_MAX,
-    GEYSERWALA_AUTOMATION_TEMP_MIN,
-    GEYSERWALA_AUTOMATION_TEMP_MAX,
 )
 
 from .const import DOMAIN
@@ -42,7 +40,7 @@ class Number:
 
 SENSORS = [
     Number("Setpoint", "setpoint", None, "mdi:thermostat", True, GEYSERWALA_SETPOINT_TEMP_MIN, GEYSERWALA_SETPOINT_TEMP_MAX),
-    Number("External Setpoint", "external_setpoint", None, "mdi:thermostat", False, GEYSERWALA_AUTOMATION_TEMP_MIN, GEYSERWALA_AUTOMATION_TEMP_MAX),
+    Number("External Setpoint", "external_setpoint", None, "mdi:thermostat-auto", True, GEYSERWALA_SETPOINT_TEMP_MIN, GEYSERWALA_SETPOINT_TEMP_MAX),
 ]
 
 SENSOR_MAP = {s.id: s for s in SENSORS}

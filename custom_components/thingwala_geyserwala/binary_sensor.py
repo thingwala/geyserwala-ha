@@ -31,8 +31,8 @@ class BinarySensor:
 
 
 BINARY_SENSORS = [
-    BinarySensor("Pump", "pump_status", None, BinarySensorDeviceClass.RUNNING, "mdi:water-pump", "mdi:water-pump-off", True),
-    BinarySensor("Element", "element_demand", None, BinarySensorDeviceClass.POWER, "mdi:fire", "mdi:fire-off", True),
+    BinarySensor("Pump", "pump_status", None, BinarySensorDeviceClass.RUNNING, "mdi:water-pump", "mdi:water-pump-off", False),
+    BinarySensor("Element", "element_demand", None, BinarySensorDeviceClass.POWER, "mdi:radiator", "mdi:radiator-off", True),
 ]
 
 BINARY_SENSOR_MAP = {s.id: s for s in BINARY_SENSORS}

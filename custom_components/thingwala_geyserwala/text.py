@@ -69,6 +69,6 @@ class GeyserwalaText(GeyserwalaEntity, TextEntity):
         """Value."""
         return getattr(self.coordinator.data, self._gw_id)
 
-    async def async_set_value(self, value: str) -> None:
+    async def async_set_value(self, _value: str) -> None:
         """Set the text value."""
         await asyncio.sleep(1)

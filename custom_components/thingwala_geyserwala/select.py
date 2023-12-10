@@ -24,7 +24,7 @@ from .entity import GeyserwalaEntity
 
 ICON_MAP = {
     "mode": {
-        GEYSERWALA_MODE_SETPOINT: "mdi:thermostat-auto",
+        GEYSERWALA_MODE_SETPOINT: "mdi:thermostat-box",
         GEYSERWALA_MODE_TIMER: "mdi:timer",
         GEYSERWALA_MODE_HOLIDAY: "mdi:airplane",
         GEYSERWALA_MODE_STANDBY: "mdi:power-standby",

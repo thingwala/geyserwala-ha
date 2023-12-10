@@ -32,8 +32,8 @@ class Switch:
 
 SWITCHES = [
     Switch("Boost", "boost_demand", None, "mdi:fire", "mdi:fire-off", True),
-    Switch("External Demand", "external_demand", None, "mdi:fire", "mdi:fire-off", False),
-    Switch("Low Power Enable", "lowpower_enable", None, "mdi:fire", "mdi:fire-off", False),
+    Switch("External Demand", "external_demand", None, "mdi:fire", "mdi:fire-off", True),
+    Switch("External Disable", "external_disable", None, "mdi:water-boiler-off", "mdi:water-boiler", True),
 ]
 
 SWITCH_MAP = {s.id: s for s in SWITCHES}
@@ -78,7 +78,7 @@ class GeyserwalaSwitch(GeyserwalaEntity, SwitchEntity):
     @property
     def is_on(self) -> bool:
         """State."""
-        return getattr(self.coordinator.data, self._gw_id)
+        return bool(getattr(self.coordinator.data, self._gw_id))
 
     @property
     def icon(self) -> str:
