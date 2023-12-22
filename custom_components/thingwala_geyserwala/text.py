@@ -2,8 +2,10 @@
 # Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala text platform."""
-import asyncio
+
 from dataclasses import dataclass
+
+import asyncio
 
 from homeassistant.components.text import (
     TextEntity,
@@ -14,7 +16,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
-from .entity import GeyserwalaEntity
+from .entity import GeyserwalaEntity, gen_entity_dataclasses
+
+
+TEXTS = []
+TEXT_MAP = {}
 
 
 @dataclass
@@ -22,17 +28,9 @@ class Text:
     """Entity params."""
 
     name: str
-    id: str
-    entity_category: str
+    key: str
     icon: str
     visible: bool
-
-
-TEXTS = [
-    Text("Status", "status", None, "mdi:information-outline", True),
-]
-
-TEXT_MAP = {s.id: s for s in TEXTS}
 
 
 async def async_setup_entry(
@@ -41,21 +39,27 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Geyserwala text entities."""
+
+    entities = hass.data.get(DOMAIN + '_ENTITIES')
+    for dc in gen_entity_dataclasses(entities, 'text', Text):
+        TEXTS.append(dc)
+        TEXT_MAP[dc.key] = dc
+
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         GeyserwalaText(
             coordinator,
             TextEntityDescription(
-                key=item.id,
+                key=item.key,
                 has_entity_name=True,
                 name=item.name,
-                entity_category=item.entity_category,
+                entity_category=None,
                 icon=item.icon,
                 entity_registry_visible_default=item.visible,
                 # entity_registry_enabled_default=False,
                 # native_max=0,
             ),
-            item.id,
+            item.key,
         )
         for item in TEXTS
     )
@@ -67,7 +71,7 @@ class GeyserwalaText(GeyserwalaEntity, TextEntity):
     @property
     def native_value(self) -> int:
         """Value."""
-        return getattr(self.coordinator.data, self._gw_id)
+        return self.coordinator.data.get_value(self._gw_key)
 
     async def async_set_value(self, _value: str) -> None:
         """Set the text value."""

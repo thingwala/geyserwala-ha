@@ -1,5 +1,9 @@
 # Change Log - Geyserwala Connect - Home Assistant Integration
 
+## [0.0.8] - 2023-12-22
+
+Allow for custom values.
+
 ## [0.0.7] - 2023-12-09
 
 Migrate to persistent latch signals, with programmable hold time

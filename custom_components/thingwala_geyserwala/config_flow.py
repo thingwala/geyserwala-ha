@@ -2,6 +2,7 @@
 # Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala config flow."""
+
 from typing import Any, Dict
 
 import voluptuous as vol
@@ -17,6 +18,7 @@ from homeassistant.util.network import is_ipv6_address
 
 from thingwala.geyserwala.aio.client import GeyserwalaClientAsync
 from thingwala.geyserwala.errors import GeyserwalaException, Unauthorized
+
 from .const import DOMAIN, DEFAULT_PORT, DEFAULT_USERNAME
 
 
@@ -84,7 +86,7 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                                     session=session,
                                     )
         try:
-            if not await api.update_status():
+            if not await api.update():
                 return self.async_abort(reason="unreachable")
         except Unauthorized:
             self._errors['base'] = 'invalid_auth'

@@ -2,6 +2,7 @@
 # Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala constants."""
+
 import logging
 
 DOMAIN = "thingwala_geyserwala"

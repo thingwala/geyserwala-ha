@@ -2,6 +2,7 @@
 # Copyright (c) 2023 Thingwala                                                     #
 ####################################################################################
 """Geyserwala select platform."""
+
 from homeassistant.components.select import (
     SelectEntity,
     SelectEntityDescription,
@@ -66,13 +67,13 @@ class GeyserwalaSelect(GeyserwalaEntity, SelectEntity):
     @property
     def current_option(self) -> str:
         """Option."""
-        return getattr(self.coordinator.data, self._gw_id)
+        return self.coordinator.data.get_value(self._gw_key)
 
     async def async_select_option(self, option: str) -> None:
         """Set option."""
-        await getattr(self.coordinator.data, f"set_{self._gw_id}")(option)
+        await self.coordinator.data.set_value(self._gw_key, option)
 
     @property
     def icon(self) -> str:
         """Icon."""
-        return ICON_MAP[self._gw_id][self.current_option]
+        return ICON_MAP[self._gw_key][self.current_option]

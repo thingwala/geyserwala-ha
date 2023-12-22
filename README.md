@@ -26,6 +26,37 @@ The integration is written to allow Home Assistant to discover your Geyserwala o
 
 Note the integration includes advanced entities which are hidden by default. To change this: go to "**Setings**" -> "**Devices & Services**" -> Click the Geyserwala "*entities*" -> Adjust filters to show hidden entities -> Select the desired entites -> Click "**ENABLE SELECTED**" -> Edit the entities "*Advanced settings*". (If you find the Entity Status selection is disabled, first hide the entity.)
 
+# Custom Entities
+It is possible to configure additional entities to access more advanced Geyserwala values by adding an entry to `configuration.yaml`, e.g.:
+
+```
+thingwala_geyserwala:
+  custom_entities:
+    sensor:
+    - name: Element Runtime
+      key: element-seconds
+      device_class: duration
+      icon: mdi:heating-coil
+      visible: True
+      unit: s
+    - name: Element Cycles
+      key: element-cycles
+      icon: mdi:heating-coil
+      visible: True
+    - name: Pump Runtime
+      key: pump-seconds
+      device_class: duration
+      icon: mdi:pump
+      visible: True
+      unit: s
+    - name: Pump Cycles
+      key: pump-cycles
+      icon: mdi:pump
+      visible: True
+```
+
+Entity types `binary_sensor`, `number`, `sensor`, `switch` and `text` are supported. The schema for each type is defined in the Python file of the same name in the source.
+
 # Contribution
 Yes please! We want our Geyserwala integration with Home Assistant to be the best it can be for everyone. If you have Home Assistant development experience or have just noticed a niggly bug, feel free to fork this repo and submit a pull request.
 
