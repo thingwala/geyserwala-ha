@@ -33,10 +33,6 @@ SWITCH_SCHEMA = vol.Schema({
 })
 
 
-SWITCHES = []
-SWITCH_MAP = {}
-
-
 @dataclass
 class Switch:
     """Entity params."""
@@ -55,14 +51,19 @@ async def async_setup_entry(
 ) -> None:
     """Set up Geyserwala switch entities."""
 
+    entity_domain = 'switch'
+    switches = []
+    switch_map = {}
+
     entities = hass.data.get(DOMAIN + '_ENTITIES')
-    for dc in gen_entity_dataclasses(entities, 'switch', Switch):
-        SWITCHES.append(dc)
-        SWITCH_MAP[dc.key] = dc
+    for dc in gen_entity_dataclasses(entities, entity_domain, Switch):
+        switches.append(dc)
+        switch_map[dc.key] = dc
 
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         GeyserwalaSwitch(
+            hass, entity_domain,
             coordinator,
             SwitchEntityDescription(
                 key=item.key,
@@ -74,13 +75,17 @@ async def async_setup_entry(
                 entity_registry_enabled_default=True,
             ),
             item.key,
+            switch_map
         )
-        for item in SWITCHES
+        for item in switches
     )
 
 
 class GeyserwalaSwitch(GeyserwalaEntity, SwitchEntity):
     """Geyserwala switch entity."""
+    def __init__(self, hass, entity_domain, coordinator, description, gw_key, switch_map):
+        super().__init__(hass, entity_domain, coordinator, description, gw_key)
+        self._switch_map = switch_map
 
     async def async_turn_on(self, **_kwargs: Any) -> None:
         """Turn on."""
@@ -99,5 +104,5 @@ class GeyserwalaSwitch(GeyserwalaEntity, SwitchEntity):
     def icon(self) -> str:
         """Icon."""
         if self.is_on:
-            return SWITCH_MAP[self._gw_key].icon_on
-        return SWITCH_MAP[self._gw_key].icon_off
+            return self._switch_map[self._gw_key].icon_on
+        return self._switch_map[self._gw_key].icon_off

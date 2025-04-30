@@ -31,9 +31,6 @@ BINARY_SENSOR_SCHEMA = vol.Schema({
     vol.Optional('visible', default=False): cv.boolean,
 })
 
-BINARY_SENSORS = []
-BINARY_SENSOR_MAP = {}
-
 
 @dataclass
 class BinarySensor:
@@ -52,14 +49,19 @@ async def async_setup_entry(
 ) -> None:
     """Set up Geyserwala binary sensor entities."""
 
+    entity_domain = 'binary_sensor'
+    binary_sensors = []
+    binary_sensor_map = {}
+
     entities = hass.data.get(DOMAIN + '_ENTITIES')
-    for dc in gen_entity_dataclasses(entities, 'binary_sensor', BinarySensor):
-        BINARY_SENSORS.append(dc)
-        BINARY_SENSOR_MAP[dc.key] = dc
+    for dc in gen_entity_dataclasses(entities, entity_domain, BinarySensor):
+        binary_sensors.append(dc)
+        binary_sensor_map[dc.key] = dc
 
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         GeyserwalaBinarySensor(
+            hass, entity_domain,
             coordinator,
             BinarySensorEntityDescription(
                 key=item.key,
@@ -70,14 +72,19 @@ async def async_setup_entry(
                 entity_registry_visible_default=item.visible,
                 entity_registry_enabled_default=True,
             ),
-            item.key
+            item.key,
+            binary_sensor_map
         )
-        for item in BINARY_SENSORS
+        for item in binary_sensors
     )
 
 
 class GeyserwalaBinarySensor(GeyserwalaEntity, BinarySensorEntity):
     """Geyserwala binary sensor entity."""
+
+    def __init__(self, hass, entity_domain, coordinator, description, gw_key, binary_sensor_map):
+        super().__init__(hass, entity_domain, coordinator, description, gw_key)
+        self._binary_sensor_map = binary_sensor_map
 
     @property
     def is_on(self) -> bool:
@@ -88,5 +95,5 @@ class GeyserwalaBinarySensor(GeyserwalaEntity, BinarySensorEntity):
     def icon(self) -> str:
         """Icon."""
         if self.is_on:
-            return BINARY_SENSOR_MAP[self._gw_key].icon_on
-        return BINARY_SENSOR_MAP[self._gw_key].icon_off
+            return self._binary_sensor_map[self._gw_key].icon_on
+        return self._binary_sensor_map[self._gw_key].icon_off

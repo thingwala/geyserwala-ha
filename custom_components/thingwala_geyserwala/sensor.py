@@ -33,10 +33,6 @@ SENSOR_SCHEMA = vol.Schema({
 })
 
 
-SENSORS = []
-SENSOR_MAP = {}
-
-
 @dataclass
 class Sensor:
     """Entity params."""
@@ -56,14 +52,17 @@ async def async_setup_entry(
 ) -> None:
     """Set up Geyserwala sensor entities."""
 
+    entity_domain = 'sensor'
+    sensors = []
+
     entities = hass.data.get(DOMAIN + '_ENTITIES')
-    for dc in gen_entity_dataclasses(entities, 'sensor', Sensor):
-        SENSORS.append(dc)
-        SENSOR_MAP[dc.key] = dc
+    for dc in gen_entity_dataclasses(entities, entity_domain, Sensor):
+        sensors.append(dc)
 
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         GeyserwalaSensor(
+            hass, entity_domain,
             coordinator,
             SensorEntityDescription(
                 key=item.key,
@@ -79,7 +78,7 @@ async def async_setup_entry(
             ),
             item.key,
         )
-        for item in SENSORS
+        for item in sensors
     )
 
 

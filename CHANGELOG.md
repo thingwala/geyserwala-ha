@@ -1,5 +1,10 @@
 # Change Log - Geyserwala Connect - Home Assistant Integration
 
+## [0.0.9] - 2025-04-30
+
+### Changed
+- Entity IDs are derived from the device hostname, previously the device name.
+
 ## [0.0.8] - 2023-12-22
 
 Allow for custom values.

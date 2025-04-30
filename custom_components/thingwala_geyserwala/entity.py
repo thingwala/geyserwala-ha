@@ -7,7 +7,8 @@ import dataclasses
 
 from homeassistant.helpers.entity import (
     DeviceInfo,
-    EntityDescription
+    EntityDescription,
+    generate_entity_id,
 )
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -24,6 +25,7 @@ class GeyserwalaEntity(CoordinatorEntity[DataUpdateCoordinator[GeyserwalaClientA
 
     def __init__(
         self,
+        hass, entity_domain,
         coordinator: DataUpdateCoordinator[GeyserwalaClientAsync],
         description: EntityDescription,
         gw_key: str,
@@ -39,6 +41,12 @@ class GeyserwalaEntity(CoordinatorEntity[DataUpdateCoordinator[GeyserwalaClientA
             model="Geyserwala",
             name=self.coordinator.data.name,
             sw_version=self.coordinator.data.version,
+        )
+        slug = self.coordinator.data.hostname.replace("-", "_").replace(".", "_").lower()
+        self.entity_id = generate_entity_id(
+            f"{entity_domain}.{{}}",
+            f"{slug}_{self._gw_key}",
+            hass=hass,
         )
         coordinator.data.subscribe(gw_key)
 

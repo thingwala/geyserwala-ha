@@ -19,10 +19,6 @@ from .const import DOMAIN
 from .entity import GeyserwalaEntity, gen_entity_dataclasses
 
 
-TEXTS = []
-TEXT_MAP = {}
-
-
 @dataclass
 class Text:
     """Entity params."""
@@ -40,14 +36,17 @@ async def async_setup_entry(
 ) -> None:
     """Set up Geyserwala text entities."""
 
+    entity_domain = 'text'
+    texts = []
+
     entities = hass.data.get(DOMAIN + '_ENTITIES')
-    for dc in gen_entity_dataclasses(entities, 'text', Text):
-        TEXTS.append(dc)
-        TEXT_MAP[dc.key] = dc
+    for dc in gen_entity_dataclasses(entities, entity_domain, Text):
+        texts.append(dc)
 
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         GeyserwalaText(
+            hass, entity_domain,
             coordinator,
             TextEntityDescription(
                 key=item.key,
@@ -61,7 +60,7 @@ async def async_setup_entry(
             ),
             item.key,
         )
-        for item in TEXTS
+        for item in texts
     )
 
 

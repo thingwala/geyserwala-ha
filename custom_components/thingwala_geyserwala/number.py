@@ -34,10 +34,6 @@ NUMBER_SCHEMA = vol.Schema({
 })
 
 
-NUMBERS = []
-NUMBERS_MAP = {}
-
-
 @dataclass
 class Number:
     """Entity params."""
@@ -59,14 +55,17 @@ async def async_setup_entry(
 ) -> None:
     """Set up Geyserwala number entities."""
 
+    entity_domain = 'number'
+    numbers = []
+
     entities = hass.data.get(DOMAIN + '_ENTITIES')
-    for dc in gen_entity_dataclasses(entities, 'number', Number):
-        NUMBERS.append(dc)
-        NUMBERS_MAP[dc.key] = dc
+    for dc in gen_entity_dataclasses(entities, entity_domain, Number):
+        numbers.append(dc)
 
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities(
         GeyserwalaNumber(
+            hass, entity_domain,
             coordinator,
             NumberEntityDescription(
                 key=item.key,
@@ -84,7 +83,7 @@ async def async_setup_entry(
             ),
             item.key,
         )
-        for item in NUMBERS
+        for item in numbers
     )
 
 

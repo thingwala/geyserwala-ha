@@ -12,6 +12,19 @@ At present this integration is a custom integration, a few steps are required to
 * At the bottom left of the "**Check and Restart**" panel, click "**CHECK CONFIGURATION**".
 * If you see "*Configuration will not prevent Home Assistant from starting!*", then click "**RESTART**" at the bottom right of the panel.
 
+An example using the Terminal Add-on on Home Assistant OS:
+
+```
+wget https://github.com/thingwala/geyserwala-ha/archive/refs/tags/v0.0.9.zip
+unzip v0.0.9.zip
+mkdir -p /config/custom_components/
+cp -r geyserwala-ha-0.0.9/custom_components/thingwala_geyserwala /config/custom_components/
+# Then test config and restart
+```
+
+# Multiple Devices
+The Home Assistant entity IDs are derived from the Geyserwala "Hostname", so for cleaner entity IDs be sure to configure each Geyserwala with a unique hostname before adding the device.
+
 # Adding your Geyserwala
 The integration is written to allow Home Assistant to discover your Geyserwala on your network using Zeroconf. However if you do not get a notification:
 * On the side bar menu select "**Settings**".
@@ -24,7 +37,7 @@ The integration is written to allow Home Assistant to discover your Geyserwala o
 * Click "**SUBMIT**", and then "**FINISH**".
 * Your Geyserwala should now be available to your Home Assistant dashboard.
 
-Note the integration includes advanced entities which are hidden by default. To change this: go to "**Setings**" -> "**Devices & Services**" -> Click the Geyserwala "*entities*" -> Adjust filters to show hidden entities -> Select the desired entites -> Click "**ENABLE SELECTED**" -> Edit the entities "*Advanced settings*". (If you find the Entity Status selection is disabled, first hide the entity.)
+Note the integration includes advanced entities which are hidden by default. To change this: go to "**Settings**" -> "**Devices & Services**" -> Click the Geyserwala "*entities*" -> Adjust filters to show hidden entities -> Select the desired entites -> Click "**ENABLE SELECTED**" -> Edit the entities "*Advanced settings*". (If you find the Entity Status selection is disabled, first hide the entity.)
 
 # Custom Entities
 It is possible to configure additional entities to access more advanced Geyserwala values by adding an entry to `configuration.yaml`, e.g.:

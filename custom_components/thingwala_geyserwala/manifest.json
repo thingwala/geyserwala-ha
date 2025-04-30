@@ -3,14 +3,14 @@
   "name": "Geyserwala",
   "codeowners": ["@thingwala"],
   "config_flow": true,
-  "dependencies": ["zeroconf"],
+  "dependencies": [],
   "documentation": "https://github.com/thingwala/geyserwala-ha/blob/main/README.md",
   "homekit": {},
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/thingwala/geyserwala-ha/issues",
-  "requirements": ["thingwala-geyserwala==0.0.8"],
+  "requirements": ["thingwala-geyserwala==0.0.9"] ,
   "ssdp": [],
-  "version": "0.0.8",
+  "version": "0.0.9",
   "zeroconf": ["_geyserwala._tcp.local."]
 }

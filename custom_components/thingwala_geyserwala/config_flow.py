@@ -8,12 +8,12 @@ from typing import Any, Dict
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.components import zeroconf
 from homeassistant.const import CONF_IP_ADDRESS, CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import (
     async_create_clientsession,
 )
+from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from homeassistant.util.network import is_ipv6_address
 
 from thingwala.geyserwala.aio.client import GeyserwalaClientAsync
@@ -32,7 +32,7 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._config: Dict[str, Any] = {}
         self._errors: Dict[str, str] = {}
 
-    async def async_step_zeroconf(self, discovery_info: zeroconf.ZeroconfServiceInfo) -> FlowResult:
+    async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> FlowResult:
         """Handle zeroconf discovery."""
         properties = discovery_info.properties
         ip_address = discovery_info.host
@@ -96,6 +96,7 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return await self.async_step_user()
         self._config['id'] = api.id
         self._config['name'] = api.name
+        self._config['hostname'] = api.hostname
 
         return self.async_create_entry(
             title=self._config['name'],
