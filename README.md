@@ -5,6 +5,26 @@ Geyserwala - Home Assistant Integration <!-- omit in toc -->
 
 # Installing into Home Assistant
 At present this integration is a custom integration, a few steps are required to install it into your Home Assistant:
+
+## Installing using [HACS](https://hacs.xyz/)
+
+* Add this repo as an integration custom repo:
+  * On the side bar menu select "**HACS**"..
+  * Click the three dot menu in the top right.
+  * Click on "**Custom repositories**".
+  * Paste `https://github.com/thingwala/geyserwala-ha` into the "**Repository**" field.
+  * Set the type to "**Integration**".
+  * Click "**Add**".
+* Search for "**Geyserwala**".
+* Click on the integration.
+* Click "**Download**" in the bottom right.
+* Click "**Download**" in the popup.
+* On the side bar menu select "**Developer Tools**".
+* At the bottom left of the "**Check and Restart**" panel, click "**CHECK CONFIGURATION**".
+* If you see "*Configuration will not prevent Home Assistant from starting!*", then click "**RESTART**" at the bottom right of the panel.
+
+## Installing custom integration manually
+
 * Download this repository as a ZIP file by clicking this [link](https://github.com/thingwala/geyserwala-ha/zipball/main).
 * Uncompress the ZIP file, and browse into it.
 * Move/copy the `thingwala_geyserwala` folder to `.../homeassistant/core/config/custom_components/thingwala_geyserwala`.
