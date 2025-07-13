@@ -4,7 +4,9 @@ Geyserwala - Home Assistant Integration <!-- omit in toc -->
 ***Home Assistant custom integration for Geyserwala***
 
 # Installing into Home Assistant
-At present this integration is a custom integration, a few steps are required to install it into your Home Assistant:
+At present this integration is a custom integration that consumes the HTTP REST interface,  a few steps are required to install it into your Home Assistant. If you would like consume the MQTT interface using your own custom entities see [MQTT.md](./MQTT.md)
+
+To install it into your Home Assistant you have two options:
 
 ## Installing using [HACS](https://hacs.xyz/)
 
