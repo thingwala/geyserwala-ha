@@ -52,7 +52,7 @@ The integration is written to allow Home Assistant to discover your Geyserwala o
 * On the side bar menu select "**Settings**".
 * Then select "**Devices & Services**"
 * Then click "**+ ADD INTEGRATION**" at the bottom right of your browser.
-* Type "*Geysewalar*" into the search box.
+* Type "*Geyserwala*" into the search box.
 * "*Geyserwala*" should show up in the list, click it.
 * Enter the device details.
   * You can use your Geyserwala `IP` address as the `Host`, which you can find by looking on the device menus. Press SET 4 times, "Info" page 1.
