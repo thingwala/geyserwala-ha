@@ -1,4 +1,22 @@
+<!-- markdownlint-disable MD024 -->
 # Change Log - Geyserwala Connect - Home Assistant Integration
+
+## [0.1.0] - 2026-05-17
+
+### Added
+- Integration options flow for configurable update interval.
+- Shared platform setup helper to reduce cross-module coupling.
+- Initial unit tests for setup and entity helper behavior.
+- CI workflow for `ruff` and `pytest`.
+
+### Changed
+- Coordinator update logic hardened with timeout handling, bounded retries, and clearer error propagation.
+- Improved platform entity setup reliability and icon fallback behavior.
+- Added support for YAML custom `text` entities in config schema.
+- Improved typing and maintainability across core modules.
+
+### Docs
+- Expanded README with polling options, reliability details, troubleshooting, and development workflow.
 
 ## [0.0.9] - 2025-04-30
 

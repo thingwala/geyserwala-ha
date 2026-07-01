@@ -1,11 +1,15 @@
 {
   "config": {
     "abort": {
-      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "reconfigure_successful": "Device reconfigured successfully",
+      "reconfigure_failed": "Failed to reconfigure device"
     },
     "error": {
       "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
-      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]"
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "dependency_not_installed": "Required dependency failed to install. Restart Home Assistant and check logs.",
+      "dependency_load_failed": "Required dependency failed to load. Check Home Assistant logs for details."
     },
     "step": {
       "user": {
@@ -16,7 +20,50 @@
           "username": "Username",
           "password": "Password"
         }
+      },
+      "reconfigure": {
+        "title": "Update device connection settings",
+        "description": "Update the connection settings for {device_name}. The device will be validated and the integration will reload.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password"
+        }
       }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Integration Settings & Features",
+        "description": "Configure polling interval and enable/disable features. All advanced feature settings are available in the next step and are preserved even when features are disabled.",
+        "data": {
+          "host": "Host - Device IP address or hostname",
+          "port": "Port - Device connection port",
+          "username": "Username - Device login username",
+          "password": "Password - Device login password",
+          "update_interval": "Update interval (seconds) - How often to poll the device (min: 5, max: 600)",
+          "enable_services": "Enable Custom Services - Control boost, mode, error codes via custom Home Assistant services",
+          "enable_mqtt": "Enable MQTT Transport - Use MQTT for device communication instead of HTTP",
+          "enable_calibration": "Enable Sensor Calibration - Apply per-entity offset and multiplier adjustments",
+          "enable_alerts": "Enable Alert Rules - Create threshold and state-change alerts with notifications"
+        }
+      },
+      "features": {
+        "title": "Advanced Feature Settings",
+        "description": "Configure transport, calibration, and alert settings. All fields are shown for easier management, and values are preserved for later use when features are re-enabled.",
+        "data": {
+          "transport": "Transport Protocol - Runtime protocol used when MQTT transport is enabled",
+          "mqtt_base_topic": "MQTT Base Topic - Root topic used when MQTT transport is enabled (default: geyserwala)",
+          "calibrations_json": "Sensor Calibrations (JSON) - Applied when Sensor Calibration is enabled",
+          "alert_rules_json": "Alert Rules (JSON) - Applied when Alert Rules is enabled"
+        }
+      }
+    },
+    "error": {
+      "invalid_calibrations_json": "Invalid calibrations JSON format",
+      "invalid_alert_rules_json": "Invalid alert rules JSON format"
     }
   }
 }

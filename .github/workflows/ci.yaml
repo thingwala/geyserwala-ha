@@ -1,0 +1,32 @@
+name: Python quality checks
+
+"on":
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: set up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements_dev.txt
+
+      - name: ruff
+        run: ruff check custom_components tests
+
+      - name: pytest
+        run: pytest tests -vv

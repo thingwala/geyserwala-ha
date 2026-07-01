@@ -2,6 +2,7 @@ setup:
 	python -m pip install -r ./requirements_dev.txt
 
 check:
+	ruff check ./custom_components/thingwala_geyserwala ./tests
 	flake8 ./custom_components/thingwala_geyserwala --ignore E501
 	find ./custom_components/thingwala_geyserwala -name '*.py' \
 	| xargs pylint -d invalid-name \
@@ -11,4 +12,4 @@ check:
 	               -d no-name-in-module
 
 test:
-	pytest ./test/ -vvv --junitxml=./reports/unittest-results.xml
+	pytest ./tests/ -vvv --junitxml=./reports/unittest-results.xml

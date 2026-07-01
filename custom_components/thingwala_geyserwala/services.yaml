@@ -1,0 +1,65 @@
+####################################################################################
+# Copyright (c) 2023 Thingwala                                                     #
+####################################################################################
+# Geyserwala custom services
+
+set_boost:
+  name: Set Boost
+  description: Enable/disable boost mode on the geyser with optional duration
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: thingwala_geyserwala
+      required: true
+      description: The Geyserwala device to control
+    enabled:
+      selector:
+        boolean:
+      required: true
+      description: Enable or disable boost mode
+    duration_minutes:
+      selector:
+        number:
+          min: 0
+          max: 480
+          unit_of_measurement: minutes
+      description: Duration for boost mode (0 = use device default)
+
+set_mode:
+  name: Set Mode
+  description: Change the geyser operating mode
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: thingwala_geyserwala
+      required: true
+      description: The Geyserwala device to control
+    mode:
+      selector:
+        text:
+      required: true
+      description: Mode name (e.g., 'Manual', 'Scheduled', 'Hybrid')
+
+read_error_codes:
+  name: Read Error Codes
+  description: Retrieve all active error codes from the device
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: thingwala_geyserwala
+      required: true
+      description: The Geyserwala device to query
+
+clear_error_codes:
+  name: Clear Error Codes
+  description: Clear all error codes from the device
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: thingwala_geyserwala
+      required: true
+      description: The Geyserwala device to control
