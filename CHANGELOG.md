@@ -3,7 +3,10 @@
 ## [Unreleased]
 
 ### Added
-- Timers: per timer a summary sensor, start and end `time` entities, a target temperature `number`, and day-of-week switches (disabled by default). Read every 60 seconds with a separate coordinator; the integration still loads if timers can't be read.
+- Timers: per timer a summary sensor, start and end `time` entities, a target temperature `number`, and day-of-week switches (disabled by default). Read every 60 seconds with a separate coordinator; the integration still loads if timers can't be read, and reloads itself when timers are added or deleted.
+
+### Fixed
+- Config flow errors showed raw translation keys (e.g. `[%key:common::config_flow::error::cannot_connect%]`).
 
 ## [0.0.9] - 2025-04-30
 

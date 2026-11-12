@@ -68,7 +68,7 @@ The Geyserwala timers (schedule) are shown in Home Assistant, one set of entitie
 * `number.<hostname>_timer_N_temperature`: target temperature, editable.
 * `switch.<hostname>_timer_N_<day>`: whether the timer runs on that day. These seven switches per timer are disabled by default; enable them if you want to edit days from Home Assistant.
 
-Timers are read every 60 seconds. Timers only heat in TIMER mode. If you add or delete a timer in the Geyserwala app, reload the integration to update the list of entities.
+Timers are read every 60 seconds. Timers only heat in TIMER mode. If you add or delete a timer in the Geyserwala app, the integration reloads itself within a minute and the entities follow (timers are numbered in the order the device lists them).
 
 # Custom Entities
 It is possible to configure additional entities to access more advanced Geyserwala values by adding an entry to `configuration.yaml`, e.g.:

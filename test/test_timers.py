@@ -126,3 +126,14 @@ async def test_no_timers_still_loads(hass: HomeAssistant):
     assert len(hass.states.async_entity_ids("sensor")) >= 1
     assert not [e for e in hass.states.async_entity_ids() if "timer" in e]
     assert hass.states.get("sensor.geyserwala_timer_1_summary") is None
+
+
+async def test_reload_when_timer_added(hass: HomeAssistant):
+    client = FakeClient()
+    entry = await _setup(hass, client)
+    client.timers.append({"id": 9, "begin": [18, 0], "end": [19, 0], "temp": 50, "dow": [True] * 7})
+    from custom_components.thingwala_geyserwala.timers import timer_coordinator_key
+    with patch(f"custom_components.{DOMAIN}.GeyserwalaClientAsync", return_value=client):
+        await hass.data[DOMAIN][timer_coordinator_key(entry.entry_id)].async_refresh()
+        await hass.async_block_till_done()
+    assert hass.states.get("sensor.geyserwala_timer_3_summary").state == "18:00-19:00 50°C Every day"

@@ -4,9 +4,8 @@
 """Geyserwala timer (schedule) support.
 
 Timers are read with a separate, slower coordinator so the 2 second value
-poll is unchanged. Entities are created per timer that exists when the
-integration is set up; reload the integration after adding or deleting a
-timer in the Geyserwala app.
+poll is unchanged. Entities are created per timer; when a timer is added or
+deleted on the device the integration reloads itself to match.
 """
 
 from copy import deepcopy

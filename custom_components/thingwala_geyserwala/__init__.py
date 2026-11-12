@@ -10,7 +10,7 @@ import async_timeout
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import (
     # async_get_clientsession
@@ -33,7 +33,7 @@ from .sensor import SENSOR_SCHEMA
 from .binary_sensor import BINARY_SENSOR_SCHEMA
 from .switch import SWITCH_SCHEMA
 from .number import NUMBER_SCHEMA
-from .timers import create_timer_coordinator, timer_coordinator_key
+from .timers import create_timer_coordinator, timer_coordinator_key, timer_ids
 
 PLATFORMS: List[Platform] = [
     Platform.TEXT,
@@ -102,6 +102,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.config_entries.async_update_entry(entry, unique_id=gwc.id)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Timers added or deleted on the device: reload so entities match.
+    known_timer_ids = set(timer_ids(timer_coordinator))
+
+    @callback
+    def _async_check_timer_ids() -> None:
+        if timer_coordinator.last_update_success and set(timer_ids(timer_coordinator)) != known_timer_ids:
+            _LOGGER.info("Geyserwala timers added or deleted, reloading")
+            hass.config_entries.async_schedule_reload(entry.entry_id)
+
+    entry.async_on_unload(timer_coordinator.async_add_listener(_async_check_timer_ids))
     return True
 
 
