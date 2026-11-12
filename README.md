@@ -61,6 +61,15 @@ The integration is written to allow Home Assistant to discover your Geyserwala o
 
 Note the integration includes advanced entities which are hidden by default. To change this: go to "**Settings**" -> "**Devices & Services**" -> Click the Geyserwala "*entities*" -> Adjust filters to show hidden entities -> Select the desired entites -> Click "**ENABLE SELECTED**" -> Edit the entities "*Advanced settings*". (If you find the Entity Status selection is disabled, first hide the entity.)
 
+# Timers
+The Geyserwala timers (schedule) are shown in Home Assistant, one set of entities per timer:
+* `sensor.<hostname>_timer_N_summary`: e.g. `08:00-09:45 45°C Mon-Fri`, with attributes `start`, `end`, `temperature` and `days`.
+* `time.<hostname>_timer_N_start` and `time.<hostname>_timer_N_end`: start and end time, editable.
+* `number.<hostname>_timer_N_temperature`: target temperature, editable.
+* `switch.<hostname>_timer_N_<day>`: whether the timer runs on that day. These seven switches per timer are disabled by default; enable them if you want to edit days from Home Assistant.
+
+Timers are read every 60 seconds. Timers only heat in TIMER mode. If you add or delete a timer in the Geyserwala app, the integration reloads itself within a minute and the entities follow (timers are numbered in the order the device lists them).
+
 # Custom Entities
 It is possible to configure additional entities to access more advanced Geyserwala values by adding an entry to `configuration.yaml`, e.g.:
 

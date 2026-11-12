@@ -3,14 +3,13 @@
 ####################################################################################
 """Geyserwala integration by Thingwala."""
 
+import asyncio
 from datetime import timedelta
 from typing import List
 
-import async_timeout
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import (
     # async_get_clientsession
@@ -33,6 +32,7 @@ from .sensor import SENSOR_SCHEMA
 from .binary_sensor import BINARY_SENSOR_SCHEMA
 from .switch import SWITCH_SCHEMA
 from .number import NUMBER_SCHEMA
+from .timers import create_timer_coordinator, timer_coordinator_key, timer_ids
 
 PLATFORMS: List[Platform] = [
     Platform.TEXT,
@@ -41,6 +41,7 @@ PLATFORMS: List[Platform] = [
     Platform.SWITCH,
     Platform.NUMBER,
     Platform.SELECT,
+    Platform.TIME,
 ]
 
 CONFIG_SCHEMA = vol.Schema({
@@ -58,7 +59,7 @@ CONFIG_SCHEMA = vol.Schema({
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up as config entry."""
     async def _async_update_status():
-        async with async_timeout.timeout(20):
+        async with asyncio.timeout(20):
             try:
                 await gwc.update()
             except thingwala.geyserwala.errors.RequestError as ex:
@@ -88,13 +89,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     await coordinator.async_config_entry_first_refresh()
 
+    # Timers are optional: if they can't be read, no timer entities are made.
+    timer_coordinator = create_timer_coordinator(hass, entry, gwc)
+    await timer_coordinator.async_refresh()
+
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
+    hass.data[DOMAIN][timer_coordinator_key(entry.entry_id)] = timer_coordinator
 
     if entry.unique_id is None:
         hass.config_entries.async_update_entry(entry, unique_id=gwc.id)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Timers added or deleted on the device: reload so entities match.
+    known_timer_ids = set(timer_ids(timer_coordinator))
+
+    @callback
+    def _async_check_timer_ids() -> None:
+        if timer_coordinator.last_update_success and set(timer_ids(timer_coordinator)) != known_timer_ids:
+            _LOGGER.info("Geyserwala timers added or deleted, reloading")
+            hass.config_entries.async_schedule_reload(entry.entry_id)
+
+    entry.async_on_unload(timer_coordinator.async_add_listener(_async_check_timer_ids))
     return True
 
 
@@ -104,6 +121,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
+        hass.data[DOMAIN].pop(timer_coordinator_key(entry.entry_id), None)
     return unload_ok
 
 
