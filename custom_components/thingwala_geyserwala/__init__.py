@@ -3,10 +3,9 @@
 ####################################################################################
 """Geyserwala integration by Thingwala."""
 
+import asyncio
 from datetime import timedelta
 from typing import List
-
-import async_timeout
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -60,7 +59,7 @@ CONFIG_SCHEMA = vol.Schema({
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up as config entry."""
     async def _async_update_status():
-        async with async_timeout.timeout(20):
+        async with asyncio.timeout(20):
             try:
                 await gwc.update()
             except thingwala.geyserwala.errors.RequestError as ex:

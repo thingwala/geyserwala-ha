@@ -8,8 +8,8 @@ from typing import Any, Dict
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.const import CONF_IP_ADDRESS, CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
 from homeassistant.helpers.aiohttp_client import (
     async_create_clientsession,
 )
@@ -32,7 +32,7 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._config: Dict[str, Any] = {}
         self._errors: Dict[str, str] = {}
 
-    async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> FlowResult:
+    async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> ConfigFlowResult:
         """Handle zeroconf discovery."""
         properties = discovery_info.properties
         ip_address = discovery_info.host
@@ -41,7 +41,8 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="ipv6_not_supported")
         uuid = properties["id"]
         await self.async_set_unique_id(uuid)
-        self._abort_if_unique_id_configured(updates={CONF_IP_ADDRESS: ip_address, CONF_PORT: port})
+        # Updates the saved host/port (and reloads) if the device moved address.
+        self._abort_if_unique_id_configured(updates={CONF_HOST: ip_address, CONF_PORT: port})
         self._config.update({
             CONF_HOST: ip_address,
             CONF_PORT: port,
@@ -50,7 +51,7 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         })
         return await self.async_step_user()
 
-    async def async_step_user(self, user_input=None) -> FlowResult:
+    async def async_step_user(self, user_input=None) -> ConfigFlowResult:
         """Handle user input."""
         if user_input is not None:
             self._async_abort_entries_match(
@@ -76,8 +77,9 @@ class GeyserwalaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                                     errors=self._errors,
                                     )
 
-    async def async_step_validate(self) -> FlowResult:
+    async def async_step_validate(self) -> ConfigFlowResult:
         """Handle device validation."""
+        self._errors = {}
         session = async_create_clientsession(self.hass)
         api = GeyserwalaClientAsync(host=self._config[CONF_HOST],
                                     port=self._config[CONF_PORT],

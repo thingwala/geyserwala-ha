@@ -5,8 +5,8 @@
 
 import dataclasses
 
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import (
-    DeviceInfo,
     EntityDescription,
     generate_entity_id,
 )

@@ -7,6 +7,11 @@
 
 ### Fixed
 - Config flow errors showed raw translation keys (e.g. `[%key:common::config_flow::error::cannot_connect%]`).
+- When the Geyserwala is rediscovered at a new IP address, the saved host is now updated (it was saved under `ip_address`, which the integration doesn't read), so the device reconnects instead of going unavailable.
+- Config flow errors are cleared on a new attempt.
+
+### Changed
+- Replace deprecated `async_timeout`, `FlowResult` and `helpers.entity.DeviceInfo` with their current equivalents.
 
 ## [0.0.9] - 2025-04-30
 
