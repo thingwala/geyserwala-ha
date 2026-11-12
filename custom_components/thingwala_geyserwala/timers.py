@@ -8,14 +8,14 @@ poll is unchanged. Entities are created per timer; when a timer is added or
 deleted on the device the integration reloads itself to match.
 """
 
+import asyncio
 from copy import deepcopy
 from datetime import timedelta
 
-import async_timeout
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription, generate_entity_id
+from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity import EntityDescription, generate_entity_id
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
@@ -46,7 +46,7 @@ def create_timer_coordinator(
     """Coordinator holding the list of timers."""
 
     async def _async_update_timers():
-        async with async_timeout.timeout(20):
+        async with asyncio.timeout(20):
             try:
                 timers = await gwc.list_timers()
             except thingwala.geyserwala.errors.RequestError as ex:
