@@ -33,6 +33,7 @@ from .sensor import SENSOR_SCHEMA
 from .binary_sensor import BINARY_SENSOR_SCHEMA
 from .switch import SWITCH_SCHEMA
 from .number import NUMBER_SCHEMA
+from .timers import create_timer_coordinator, timer_coordinator_key
 
 PLATFORMS: List[Platform] = [
     Platform.TEXT,
@@ -41,6 +42,7 @@ PLATFORMS: List[Platform] = [
     Platform.SWITCH,
     Platform.NUMBER,
     Platform.SELECT,
+    Platform.TIME,
 ]
 
 CONFIG_SCHEMA = vol.Schema({
@@ -88,8 +90,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     await coordinator.async_config_entry_first_refresh()
 
+    # Timers are optional: if they can't be read, no timer entities are made.
+    timer_coordinator = create_timer_coordinator(hass, entry, gwc)
+    await timer_coordinator.async_refresh()
+
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
+    hass.data[DOMAIN][timer_coordinator_key(entry.entry_id)] = timer_coordinator
 
     if entry.unique_id is None:
         hass.config_entries.async_update_entry(entry, unique_id=gwc.id)
@@ -104,6 +111,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
+        hass.data[DOMAIN].pop(timer_coordinator_key(entry.entry_id), None)
     return unload_ok
 
 

@@ -1,5 +1,10 @@
 # Change Log - Geyserwala Connect - Home Assistant Integration
 
+## [Unreleased]
+
+### Added
+- Timers: per timer a summary sensor, start and end `time` entities, a target temperature `number`, and day-of-week switches (disabled by default). Read every 60 seconds with a separate coordinator; the integration still loads if timers can't be read.
+
 ## [0.0.9] - 2025-04-30
 
 ### Changed
